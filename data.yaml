@@ -1,0 +1,10 @@
+names:
+- door
+- double door
+- window
+- door demolished
+- double door demolished
+nc: 5
+test: ../test/images
+train: ../train/images
+val: ../valid/images
