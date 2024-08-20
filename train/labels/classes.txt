@@ -1,5 +1,0 @@
-door
-double door
-window
-door demolished
-double door demolished
