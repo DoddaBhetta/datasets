@@ -3,6 +3,19 @@ import random
 import shutil
 from math import floor
 
+'''
+    This script automates the process of splitting image and label data into training, 
+    validation, and test sets. It organizes the images and their corresponding labels into 
+    separate directories (train, val, and test), ensuring that both image files (.png) 
+    and their matching label files (.txt) are moved together. The data is split by a ratio 
+    of 80% for training, 10% for validation, and 10% for testing, and new folders are created 
+    for each of these splits.
+
+    You would run this script whenever you get new data, ensuring that the data is correctly organized 
+    and split for model training and evaluation.
+
+'''
+
 
 def create_folders(base_output_directory):
     # Create train, val, test folders and their subfolders
@@ -49,32 +62,12 @@ def move_files(files, image_directory, label_directory, target_directory):
             print(f"Warning: Label file {label_file} does not exist for image {file}")
 
 
-def rename_files_in_directory(directory):
-    # Iterate over all files in the directory
-    for filename in os.listdir(directory):
-        # Check if the file contains an underscore (_)
-        if "_" in filename:
-            # Create the new filename by replacing underscores with hyphens
-            new_filename = filename.replace("_", "-")
-
-            # Get the full path for the old and new filenames
-            old_file = os.path.join(directory, filename)
-            new_file = os.path.join(directory, new_filename)
-
-            # Rename the file
-            os.rename(old_file, new_file)
-            print(f'Renamed: {filename} -> {new_filename}')
-
-
 def main():
     # Input: Directory containing images
     image_directory = '/Users/elmorajahm1/Desktop/datasets/combined_data/images'
 
     # Input: Directory containing labels
     label_directory = '/Users/elmorajahm1/Desktop/datasets/combined_data/labels'
-
-    rename_files_in_directory(image_directory)
-    rename_files_in_directory(label_directory)
 
     # Input: Where to create the output train, val, and test folders
     output_directory = '/Users/elmorajahm1/Desktop/datasets'
