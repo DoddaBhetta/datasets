@@ -4,21 +4,23 @@ import shutil
 from math import floor
 
 '''
-    This script automates the process of splitting image and label data into training, 
-    validation, and test sets. It organizes the images and their corresponding labels into 
-    separate directories (train, val, and test), ensuring that both image files (.png) 
-    and their matching label files (.txt) are moved together. The data is split by a ratio 
-    of 80% for training, 10% for validation, and 10% for testing, and new folders are created 
-    for each of these splits.
+    This script automates the process of moving image and label data from the combined_data folder 
+    into existing training, validation, and testing folders. It ensures that the images and their 
+    corresponding labels are moved together. The data is split by a ratio of 80% for training, 
+    10% for validation, and 10% for testing, and the new data is added to the existing data in 
+    the train, val, and test folders.
 
-    You would run this script whenever you get new data, ensuring that the data is correctly organized 
-    and split for model training and evaluation.
-
+    You would run this script whenever you get new data to ensure the combined data is correctly organized 
+    and split while adding to the current datasets.
+    
+    How to use:
+        Move files you want to move into a combined folder
+        Set paths in main()
+        run script
 '''
 
-
 def create_folders(base_output_directory):
-    # Create train, val, test folders and their subfolders
+    # Create train, val, test folders and their subfolders if they don't exist
     for split in ['train', 'val', 'test']:
         split_dir = os.path.join(base_output_directory, split)
         os.makedirs(os.path.join(split_dir, 'images'), exist_ok=True)
@@ -50,40 +52,40 @@ def move_files(files, image_directory, label_directory, target_directory):
         # Move the image
         image_source = os.path.join(image_directory, file)
         image_target = os.path.join(target_directory, 'images', file)
-        shutil.copy(image_source, image_target)
+        shutil.move(image_source, image_target)  # Use move instead of copy to remove from source
 
         # Move the corresponding label file from the separate label directory
         label_file = file.replace('.png', '.txt')
         label_source = os.path.join(label_directory, label_file)
         if os.path.exists(label_source):
             label_target = os.path.join(target_directory, 'labels', label_file)
-            shutil.copy(label_source, label_target)
+            shutil.move(label_source, label_target)  # Use move instead of copy
         else:
-            print(f"Warning: Label file {label_file} does not exist for image {file}")
+            print(f"Label file {label_file} does not exist for image {file}")
 
 
 def main():
     # Input: Directory containing images
-    image_directory = '/Users/elmorajahm1/Desktop/datasets/combined_data/images'
+    image_directory = '/Users/elmorajahm1/Desktop/test/combined_data/images'
 
     # Input: Directory containing labels
-    label_directory = '/Users/elmorajahm1/Desktop/datasets/combined_data/labels'
+    label_directory = '/Users/elmorajahm1/Desktop/test/combined_data/labels'
 
     # Input: Where to create the output train, val, and test folders
-    output_directory = '/Users/elmorajahm1/Desktop/datasets'
+    output_directory = '/Users/elmorajahm1/Desktop/test'
 
-    # Create train, val, test folders with subfolders in the output directory
+    # Create train, val, test folders with subfolders in the output directory (if they don't exist)
     create_folders(output_directory)
 
     # Split the data
     train_files, val_files, test_files = split_data(image_directory)
 
-    # Move the files to their corresponding directories (train, val, test)
+    # Move the files to their corresponding directories (train, val, test), adding to existing data
     move_files(train_files, image_directory, label_directory, os.path.join(output_directory, 'train'))
     move_files(val_files, image_directory, label_directory, os.path.join(output_directory, 'val'))
     move_files(test_files, image_directory, label_directory, os.path.join(output_directory, 'test'))
 
-    print(f"Data split complete. Train: {len(train_files)}, Val: {len(val_files)}, Test: {len(test_files)}")
+    print(f"Data split and move complete. Train: {len(train_files)}, Val: {len(val_files)}, Test: {len(test_files)}")
 
 
 if __name__ == "__main__":
