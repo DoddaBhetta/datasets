@@ -1,0 +1,4 @@
+door
+double door
+window
+wall
