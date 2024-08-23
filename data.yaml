@@ -2,7 +2,8 @@ names:
 - door
 - double door
 - window
-nc: 3
+- wall
+nc: 4
 test: ../test/images
 train: ../train/images
 val: ../valid/images
